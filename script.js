@@ -1,33 +1,35 @@
 /* script.js */
-// === Part 2: JavaScript Functions — Scope, Parameters & Return Values ===
+//  Demonstrates JavaScript functions with parameters, scope, and return values
 
-// Reusable function (with parameter) to toggle animation class
-// Demonstrates parameter usage and return value can be used if needed
-function toggleAnimation(card, shouldAnimate){
-  if(shouldAnimate){
-    card.classList.add('auto');
-  } else {
-    card.classList.remove('auto');
-  }
+// Function to handle scroll reveal animations
+function revealOnScroll() {
+  const elements = document.querySelectorAll('.scroll-animate');
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 50) {
+      el.classList.add('visible');
+    } else {
+      el.classList.remove('visible');
+    }
+  });
 }
 
-// Global scope: reference to all cards
-const cards = document.querySelectorAll('.card');
-
-// Local scope within forEach callback, demonstrating idx parameter
-cards.forEach((card, idx) => {
-  card.addEventListener('click', () => {
-    console.log(`Card ${idx+1} clicked`);
-    // Toggle animation on a single card
-    card.classList.toggle('auto');
+// Function to control card auto-animation using a parameter
+function toggleAnimation(enable) {
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    if (enable) {
+      card.classList.add('auto');
+    } else {
+      card.classList.remove('auto');
+    }
   });
-});
+  return enable; // return value showing current state
+}
 
-// === Part 3: Combining CSS Animations with JavaScript ===
-// Buttons call reusable functions to trigger CSS animation dynamically
-document.getElementById('animateAll').addEventListener('click', () => {
-  cards.forEach(c => toggleAnimation(c, true));
-});
-document.getElementById('stopAll').addEventListener('click', () => {
-  cards.forEach(c => toggleAnimation(c, false));
-});
+// Event listeners
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
+document.getElementById('animateAll').addEventListener('click', () => toggleAnimation(true));
+document.getElementById('stopAll').addEventListener('click', () => toggleAnimation(false));
